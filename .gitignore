@@ -7,13 +7,6 @@
 *.o
 *.DS_Store
 
-
-# Ruby artifacts
-*.gem
-*.rbc
-.bundle
-Gemfile.lock
-
 .pmd
 .checkstyle
 .settings
@@ -21,10 +14,9 @@ Gemfile.lock
 .pydevproject
 parts/
 
-node_modules/
-
 .cache
 .coverage
-
 *.log
-.idea/
+
+.idea
+.idea/workspace.xml
