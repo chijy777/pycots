@@ -1,8 +1,11 @@
-#!/usr/bin/env python
+"""
+COT Service
+
+Author: Tony Chi
+Updated at: 2018-06
+Content : CoAP gateway tornado application module. 
+"""
 # -*- coding: utf-8 -*-
-"""
-CoAP gateway tornado application module.
-"""
 import logging
 import time
 import uuid
@@ -12,15 +15,11 @@ from tornado.ioloop import PeriodicCallback
 import aiocoap
 import aiocoap.resource as resource
 from pycots.gateway.base import GatewayBase, Node
-from pycots.config import config as config
+from pycots.gateway.settings import GATEWAY_COAP_SERVER_IP
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)14s - %(levelname)5s - %(message)s'
-)
 logger = logging.getLogger("pycots.gw.coap")
-# COAP_PORT = 5683
-# MAX_TIME = 120
+logger.setLevel(logging.DEBUG)
+
 
 def _coap_endpoints(link_header):
     link = link_header.replace(' ', '')
@@ -35,7 +34,6 @@ def _coap_resource(url, method=aiocoap.Code.GET, payload=b''):
     request.set_request_uri(url)
     try:
         response = yield from protocol.request(request).response
-        print(response)
     except Exception as exc:
         code = "Failed to fetch resource"
         payload = '{0}'.format(exc)
@@ -46,7 +44,6 @@ def _coap_resource(url, method=aiocoap.Code.GET, payload=b''):
         yield from protocol.shutdown()
 
     logger.debug('Code: {0} - Payload: {1}'.format(code, payload))
-    print('Code: {0} - Payload: {1}'.format(code, payload))
     return code, payload
 
 
@@ -64,9 +61,6 @@ class CoapAliveResource(resource.Resource):
         Triggered when a node post an alive check to the gateway.
         """
         payload = request.payload.decode('utf8')
-        print('1======================')
-        print(request)
-        print(payload)
         try:
             remote = request.remote[0]
         except TypeError:
@@ -100,9 +94,6 @@ class CoapServerResource(resource.Resource):
         Triggered when a node post a new value to the gateway.
         """
         payload = request.payload.decode('utf-8')
-        print('2======================')
-        print(request)
-        print(payload)
         try:
             remote = request.remote[0]
         except TypeError:
@@ -143,7 +134,7 @@ class CoapGateway(GatewayBase):
         )
         asyncio.async(
             aiocoap.Context.create_server_context(
-                root_coap, bind=(config.COAP_SERVER_IP, self.port)
+                root_coap, bind=(GATEWAY_COAP_SERVER_IP, self.port)
             )
         )
 
@@ -190,6 +181,7 @@ class CoapGateway(GatewayBase):
 
         logger.debug("CoAP node resources '{}' sent to broker".format(endpoints))
 
+
     @gen.coroutine
     def update_node_resource(self, node, endpoint, payload):
         """"""
@@ -204,6 +196,7 @@ class CoapGateway(GatewayBase):
         if code == aiocoap.Code.CHANGED:
             self.forward_data_from_node(node, endpoint, payload)
 
+
     def handle_coap_post(self, address, endpoint, value):
         """
         Handle CoAP post message sent from coap node.
@@ -214,6 +207,7 @@ class CoapGateway(GatewayBase):
 
         node = self.get_node(self.node_mapping[address])
         self.forward_data_from_node(node, endpoint, value)
+
 
     def handle_coap_check(self, address, reset=False):
         """
@@ -235,6 +229,7 @@ class CoapGateway(GatewayBase):
             # The node simply sent a check message to notify that it's still online.
             node = self.get_node(self.node_mapping[address])
             node.update_last_seen()
+
 
     def check_dead_nodes(self):
         """

@@ -3,7 +3,7 @@ import logging
 import asyncio
 import random
 import aiocoap
-from pycots.test.aiocoap_test import setting
+from . import cfg
 
 
 logging.basicConfig(level=logging.INFO)
@@ -22,7 +22,7 @@ async def main():
 
     request = aiocoap.Message(
         code=aiocoap.Code.POST,
-        uri='coap://%s:5683/server' % (setting.SERVER_IP),
+        uri='coap://%s:5683/server' % (cfg.SERVER_IP),
         payload = (
             "temperature:{}°C".format(28).encode('utf-8')
         )

@@ -1,8 +1,11 @@
-#!/usr/bin/env python
+"""
+COT Service
+
+Author: Tony Chi
+Updated at: 2018-06
+Content : Server helper functions module.
+"""
 # -*- coding: utf-8 -*-
-"""
-Server helper functions module.
-"""
 import logging
 import signal
 from functools import partial

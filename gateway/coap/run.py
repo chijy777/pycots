@@ -1,8 +1,11 @@
-#!/usr/bin/env python
+"""
+COT Service
+
+Author: Tony Chi
+Updated at: 2018-06
+Content : CoAP gateway application module. 
+"""
 # -*- coding: utf-8 -*-
-"""
-CoAP gateway application module.
-"""
 import sys
 import logging
 import tornado.platform.asyncio
@@ -10,7 +13,7 @@ from tornado.options import define, options
 from pycots.common.auth import check_key_file
 from pycots.common.helpers import start_application, parse_command_line
 from pycots.gateway.coap.gateway import CoapGateway
-from pycots.config import config as config
+from pycots.gateway.settings import GATEWAY_COAP_MAX_RETENTION_TIME, GATEWAY_COAP_SERVER_PORT
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -25,13 +28,12 @@ def extra_args():
     """
     if not hasattr(options, "coap_port"):
         define(
-            "coap_port", default=config.COAP_SERVER_PORT, help="Gateway CoAP server port"
+            "coap_port", default=GATEWAY_COAP_SERVER_PORT, help="Gateway CoAP server port"
         )
 
     if not hasattr(options, "max_time"):
         define(
-            "max_time", default=config.COAP_MAX_RETENTION_TIME,
-            help="Maximum retention time (in s) for CoAP dead nodes"
+            "max_time", default=GATEWAY_COAP_MAX_RETENTION_TIME, help="Maximum retention time (in s) for CoAP dead nodes"
         )
 
 

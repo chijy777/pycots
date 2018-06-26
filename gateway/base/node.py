@@ -1,8 +1,11 @@
-#!/usr/bin/env python
+"""
+COT Service
+
+Author: Tony Chi
+Updated at: 2018-06
+Content : Class for managed node. 
+"""
 # -*- coding: utf-8 -*-
-"""
-Class for managed node.
-"""
 import logging
 import time
 

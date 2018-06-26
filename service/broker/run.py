@@ -8,7 +8,7 @@ from tornado.options import options
 
 from pycots.common.auth import check_key_file
 from pycots.common.helpers import start_application, parse_command_line
-from pycots.broker.broker import Broker, logger
+from pycots.service.broker.broker import Broker, logger
 
 
 def run(arguments=[]):

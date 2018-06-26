@@ -1,8 +1,11 @@
-#!/usr/bin/env python
+"""
+COT Service
+
+Author: Tony Chi
+Updated at: 2018-06
+Content : messaging utility module 
+"""
 # -*- coding: utf-8 -*-
-"""
-权限管理.
-"""
 import os.path
 import string
 import configparser

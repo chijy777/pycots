@@ -3,7 +3,7 @@ import logging
 import asyncio
 import aiocoap
 import aiocoap.resource as resource
-from pycots.test.aiocoap_test import cfg
+from . import cfg
 
 
 class BlockResource(resource.Resource):

@@ -1,11 +1,19 @@
+"""
+COT Service
+
+Author: Tony Chi
+Updated at: 2018-06
+Content : 
+"""
 # encoding -*- utf-8 -*-
 import logging
 import asyncio
 import random
 import aiocoap
-from pycots.config import config as config
+from pycots.gateway.settings import GATEWAY_COAP_SERVER_IP, GATEWAY_COAP_SERVER_PORT
 
 logging.basicConfig(level=logging.INFO)
+
 
 async def main():
     protocol = await aiocoap.Context.create_client_context()
@@ -22,7 +30,7 @@ async def main():
 
     request = aiocoap.Message(
         code=aiocoap.Code.POST,
-        uri='coap://%s:%s/server' % (config.COAP_SERVER_IP, config.COAP_SERVER_PORT),
+        uri='coap://%s:%s/server' % ( GATEWAY_COAP_SERVER_IP, GATEWAY_COAP_SERVER_PORT ),
         payload = (
             "temperature:{}°C金瓶梅".format(28).encode('utf-8')
         )

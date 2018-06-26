@@ -1,4 +1,10 @@
-#!/usr/bin/env python
+"""
+COT Service
+
+Author: Tony Chi
+Updated at: 2018-06
+Content : 
+"""
 # -*- coding: utf-8 -*-
 import sys
 import asyncio
@@ -11,20 +17,18 @@ from tornado import gen
 from tornado.ioloop import PeriodicCallback
 import aiocoap
 import aiocoap.resource as resource
-from pycots.config import config as config
+from pycots.gateway.settings import GATEWAY_COAP_SERVER_PORT, GATEWAY_COAP_SERVER_IP
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)14s - %(levelname)5s - %(message)s'
-)
 internal_logger = logging.getLogger("tornado.internal")
-
+internal_logger.setLevel(logging.DEBUG)
 
 parser = argparse.ArgumentParser(description="Test CoAP client")
-parser.add_argument('--gateway-host', type=str,
-                    default=config.COAP_SERVER_IP, help="Gateway Coap server host.")
-parser.add_argument('--gateway-port', type=int,
-                    default=config.COAP_SERVER_PORT, help="Gateway Coap server port.")
+parser.add_argument(
+    '--gateway-host', type=str, default=GATEWAY_COAP_SERVER_IP, help="Gateway Coap server host."
+)
+parser.add_argument(
+    '--gateway-port', type=int, default=GATEWAY_COAP_SERVER_PORT, help="Gateway Coap server port."
+)
 parser.add_argument('--imu', action="store_true", help="Activate IMU endpoint.")
 parser.add_argument('--led', action="store_true", help="Activate LED endpoint.")
 parser.add_argument('--temperature', action="store_true", help="Activate Temperature endpoint.")

@@ -1,8 +1,11 @@
-#!/usr/bin/env python
+"""
+COT Service
+
+Author: Tony Chi
+Updated at: 2018-06
+Content : Base class for gateways. 
+"""
 # -*- coding: utf-8 -*-
-"""
-Base class for gateways.
-"""
 import json
 import logging
 from abc import ABCMeta, abstractmethod
@@ -12,7 +15,7 @@ from pycots.common.auth import auth_token
 from pycots.common.messaging import check_broker_data, Message
 
 logger = logging.getLogger("pycots.gw.base.gateway")
-
+logger.setLevel(logging.DEBUG)
 
 class GatewayBaseMixin():
     """

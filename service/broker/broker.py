@@ -6,10 +6,8 @@ Broker tornado application module.
 import uuid
 import logging
 from tornado import gen, web, websocket
-
 from pycots.common.auth import verify_auth_token
 from pycots.common.messaging import Message
-
 
 logger = logging.getLogger("pycots.broker")
 

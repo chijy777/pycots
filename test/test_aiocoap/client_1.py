@@ -2,7 +2,7 @@
 import logging
 import asyncio
 import aiocoap
-from pycots.test.aiocoap_test import cfg
+from . import cfg
 
 logging.basicConfig(level=logging.INFO)
 
