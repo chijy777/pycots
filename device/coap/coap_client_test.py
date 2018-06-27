@@ -17,17 +17,18 @@ from tornado import gen
 from tornado.ioloop import PeriodicCallback
 import aiocoap
 import aiocoap.resource as resource
-from pycots.gateway.settings import GATEWAY_COAP_SERVER_PORT, GATEWAY_COAP_SERVER_IP
+from pycots.gateway.settings import COAP_GATEWAY_HOST, COAP_GATEWAY_PORT, LOG_LEVEL
 
-internal_logger = logging.getLogger("tornado.internal")
-internal_logger.setLevel(logging.DEBUG)
+logger = logging.getLogger("coap_client_test")
+logger.setLevel(LOG_LEVEL)
+
 
 parser = argparse.ArgumentParser(description="Test CoAP client")
 parser.add_argument(
-    '--gateway-host', type=str, default=GATEWAY_COAP_SERVER_IP, help="Gateway Coap server host."
+    '--gateway_host', type=str, default=COAP_GATEWAY_HOST, help="Gateway Coap server host."
 )
 parser.add_argument(
-    '--gateway-port', type=int, default=GATEWAY_COAP_SERVER_PORT, help="Gateway Coap server port."
+    '--gateway_port', type=int, default=COAP_GATEWAY_PORT, help="Gateway Coap server port."
 )
 parser.add_argument('--imu', action="store_true", help="Activate IMU endpoint.")
 parser.add_argument('--led', action="store_true", help="Activate LED endpoint.")
@@ -61,7 +62,7 @@ def _coap_resource(url, method=aiocoap.Code.GET, payload=b''):
     finally:
         yield from protocol.shutdown()
 
-    internal_logger.debug('Code: {0} - Payload: {1}'.format(code, payload))
+    logger.debug('Code: {0} - Payload: {1}'.format(code, payload))
     return code, payload
 
 

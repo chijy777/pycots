@@ -15,15 +15,16 @@ from tornado.ioloop import PeriodicCallback
 import aiocoap
 import aiocoap.resource as resource
 from pycots.gateway.base import GatewayBase, Node
-from pycots.gateway.settings import GATEWAY_COAP_SERVER_IP
+from pycots.gateway.settings import COAP_GATEWAY_HOST, LOG_LEVEL
 
 logger = logging.getLogger("pycots.gw.coap")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(LOG_LEVEL)
 
 
 def _coap_endpoints(link_header):
     link = link_header.replace(' ', '')
     return link.split(',')
+
 
 @gen.coroutine
 def _coap_resource(url, method=aiocoap.Code.GET, payload=b''):
@@ -54,6 +55,7 @@ class CoapAliveResource(resource.Resource):
     def __init__(self, gateway):
         super(CoapAliveResource, self).__init__()
         self._gateway = gateway
+
 
     @asyncio.coroutine
     def render_post(self, request):
@@ -87,6 +89,7 @@ class CoapServerResource(resource.Resource):
     def __init__(self, gateway):
         super(CoapServerResource, self).__init__()
         self._gateway = gateway
+
 
     @asyncio.coroutine
     def render_post(self, request):
@@ -134,7 +137,7 @@ class CoapGateway(GatewayBase):
         )
         asyncio.async(
             aiocoap.Context.create_server_context(
-                root_coap, bind=(GATEWAY_COAP_SERVER_IP, self.port)
+                root_coap, bind=(COAP_GATEWAY_HOST, self.port)
             )
         )
 
@@ -144,6 +147,7 @@ class CoapGateway(GatewayBase):
         ).start()
 
         logger.info('CoAP gateway application started')
+
 
     @gen.coroutine
     def discover_node(self, node):

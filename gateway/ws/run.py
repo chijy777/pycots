@@ -11,8 +11,8 @@ import logging
 from tornado.options import define, options
 from pycots.common.auth import check_key_file
 from pycots.common.helpers import start_application, parse_command_line
+from pycots.gateway.settings import WS_GATEWAY_PORT
 from pycots.gateway.ws.gateway import WebsocketGateway
-from pycots.gateway.settings import GATEWAY_WS_SERVER_PORT
 
 logger = logging.getLogger("pycots.gw.ws")
 
@@ -22,7 +22,7 @@ def extra_args():
     Parse command line arguments for websocket gateway application.
     """
     if not hasattr(options, "gateway_port"):
-        define("gateway_port", default=GATEWAY_WS_SERVER_PORT, help="Node gateway websocket port")
+        define("gateway_port", default=WS_GATEWAY_PORT, help="Node gateway websocket port")
 
 
 def run(arguments=[]):

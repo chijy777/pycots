@@ -10,7 +10,7 @@ import logging
 import asyncio
 import random
 import aiocoap
-from pycots.gateway.settings import GATEWAY_COAP_SERVER_IP, GATEWAY_COAP_SERVER_PORT
+from pycots.gateway.settings import COAP_GATEWAY_HOST, COAP_GATEWAY_PORT
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,9 +30,9 @@ async def main():
 
     request = aiocoap.Message(
         code=aiocoap.Code.POST,
-        uri='coap://%s:%s/server' % ( GATEWAY_COAP_SERVER_IP, GATEWAY_COAP_SERVER_PORT ),
+        uri='coap://%s:%s/server' % ( COAP_GATEWAY_HOST, COAP_GATEWAY_PORT ),
         payload = (
-            "temperature:{}°C金瓶梅".format(28).encode('utf-8')
+            "temperature:{}°C卡卡".format(28).encode('utf-8')
         )
     )
     # payload = (

@@ -11,7 +11,7 @@ import argparse
 import json
 import websocket
 from pycots.common.messaging import Message
-from pycots.gateway.settings import GATEWAY_WS_SERVER_IP, GATEWAY_WS_SERVER_PORT
+from pycots.gateway.settings import WS_GATEWAY_HOST, WS_GATEWAY_PORT
 
 
 def init_node(ws):
@@ -57,13 +57,14 @@ def main(args):
                         json.dumps({'type': 'update', 'data': {'led': '0'}})
                     )
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Test Websocket node")
     parser.add_argument(
-        '--gateway_host', type=str, default=GATEWAY_WS_SERVER_IP, help="Gateway host."
+        '--gateway_host', type=str, default=WS_GATEWAY_HOST, help="Gateway Websocket server host."
     )
     parser.add_argument(
-        '--gateway_port', type=str, default=GATEWAY_WS_SERVER_PORT, help="Gateway port"
+        '--gateway_port', type=str, default=WS_GATEWAY_PORT, help="Gateway Websocket server port."
     )
     args = parser.parse_args()
     print(args)

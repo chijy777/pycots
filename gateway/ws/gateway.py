@@ -12,9 +12,10 @@ import json
 from tornado import gen, websocket
 from pycots.common.messaging import Message
 from pycots.gateway.base import GatewayBase, Node
+from pycots.gateway.settings import LOG_LEVEL
 
 logger = logging.getLogger("pycots.gw.ws")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(LOG_LEVEL)
 
 
 class WebsocketNodeHandler(websocket.WebSocketHandler):
@@ -23,6 +24,7 @@ class WebsocketNodeHandler(websocket.WebSocketHandler):
         Allow connections from anywhere.
         """
         return True
+
 
     @gen.coroutine
     def open(self):
@@ -35,6 +37,7 @@ class WebsocketNodeHandler(websocket.WebSocketHandler):
         self.application.node_mapping.update({self: node.uid})
         self.application.add_node(node)
 
+
     @gen.coroutine
     def on_message(self, raw):
         """
@@ -46,6 +49,7 @@ class WebsocketNodeHandler(websocket.WebSocketHandler):
         else:
             logger.debug("Invalid message, closing websocket")
             self.close(code=1003, reason="{}.".format(reason))
+
 
     def on_close(self):
         """
@@ -77,12 +81,14 @@ class WebsocketGateway(GatewayBase):
             'WS gateway started, listening on port {}'.format(options.gateway_port)
         )
 
+
     @gen.coroutine
     def discover_node(self, node):
         for ws, uid in self.node_mapping.items():
             if node.uid == uid:
                 yield ws.write_message(Message.discover_node())
                 break
+
 
     @gen.coroutine
     def update_node_resource(self, node, resource, value):
@@ -92,6 +98,7 @@ class WebsocketGateway(GatewayBase):
                     json.dumps({"endpoint": resource, "payload": value})
                 )
                 break
+
 
     def on_node_message(self, ws, message):
         """
@@ -104,6 +111,7 @@ class WebsocketGateway(GatewayBase):
                 self.forward_data_from_node(node, key, value)
         else:
             logger.debug("Invalid message received from node websocket")
+
 
     def remove_ws(self, ws):
         """

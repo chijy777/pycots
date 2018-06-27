@@ -13,9 +13,11 @@ from tornado import web, gen
 from tornado.websocket import websocket_connect
 from pycots.common.auth import auth_token
 from pycots.common.messaging import check_broker_data, Message
+from pycots.gateway.settings import LOG_LEVEL
 
 logger = logging.getLogger("pycots.gw.base.gateway")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(LOG_LEVEL)
+
 
 class GatewayBaseMixin():
     """
@@ -30,6 +32,7 @@ class GatewayBaseMixin():
         """
         return uid in self.nodes
 
+
     @gen.coroutine
     def add_node(self, node):
         """
@@ -42,6 +45,7 @@ class GatewayBaseMixin():
         #     self.send_to_broker(Message.update_node(node.uid, res, value))
         yield self.discover_node(node)
 
+
     def reset_node(self, node, default_resources={}):
         """
         Reset a node: clear the current resource and reinitialize them.
@@ -53,6 +57,7 @@ class GatewayBaseMixin():
         self.send_to_broker(Message.reset_node(node.uid))
         self.discover_node(node)
 
+
     def remove_node(self, node):
         """
         Remove the given node from known nodes and notify the broker.
@@ -61,11 +66,13 @@ class GatewayBaseMixin():
         logger.debug("Remaining nodes {}".format(self.nodes))
         self.send_to_broker(Message.out_node(node.uid))
 
+
     def get_node(self, uid):
         """
         Return the node matching the given uid.
         """
         return self.nodes[uid]
+
 
     @gen.coroutine
     def forward_data_from_node(self, node, resource, value):
@@ -79,6 +86,7 @@ class GatewayBaseMixin():
         self.send_to_broker(
             Message.update_node(node.uid, resource, value)
         )
+
 
     @gen.coroutine
     def fetch_nodes_cache(self, client):
@@ -96,12 +104,14 @@ class GatewayBaseMixin():
                     Message.update_node(node.uid, resource, value, dst=client)
                 )
 
+
     def close_client(self):
         """
         Close client websocket
         """
         logger.warning("Closing connection with broker.")
         self.broker.close()
+
 
     @gen.coroutine
     def create_broker_connection(self, url):
@@ -127,6 +137,7 @@ class GatewayBaseMixin():
 
             yield gen.sleep(3)
 
+
     @gen.coroutine
     def send_to_broker(self, message):
         """
@@ -135,6 +146,7 @@ class GatewayBaseMixin():
         if self.broker is not None:
             logger.debug("Sending message '{}' to broker.".format(message))
             self.broker.write_message(message)
+
 
     def on_broker_message(self, message):
         """
